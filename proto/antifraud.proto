@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package antifraud;
+option go_package = "/pb";
+
+service AntiFraudService {
+  // Unary: Validação imediata de uma transação
+  rpc AnalyzeRiskScore (RiskRequest) returns (RiskResponse);
+
+  // Client Streaming: Recebe um lote de estornos de uma vez
+  rpc BatchChargeback (stream ChargebackRequest) returns (ChargebackSummary);
+}
+
+message RiskRequest {
+  string transaction_id = 1;
+  string user_id = 2;
+  double amount = 3;
+  string ip_address = 4;
+}
+
+message RiskResponse {
+  string transaction_id = 1;
+  string status = 2;
+  int32 risk_score = 3;
+  string reason = 4;
+  string security_hash = 5;
+}
+
+message ChargebackRequest {
+  string transaction_id = 1;
+  string reason = 2;
+  string ip_address = 3;
+}
+
+message ChargebackSummary {
+  int32 total_processed = 1;
+  string message = 2;
+}

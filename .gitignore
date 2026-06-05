@@ -1,0 +1,6 @@
+# Ambiente
+.env
+
+# Configurações de IDE
+.idea/
+.vscode/

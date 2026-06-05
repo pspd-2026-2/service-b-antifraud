@@ -1,0 +1,47 @@
+{
+  "blocklist": {
+    "172.16.254.1": true,
+    "192.168.1.100": true,
+    "10.0.0.55": true
+  },
+  "transactions": {
+    "user-999": [
+      {
+        "transactionId": "tx-old-1",
+        "userId": "user-999",
+        "amount": 100.50,
+        "ipAddress": "200.0.0.1"
+      },
+      {
+        "transactionId": "tx-old-2",
+        "userId": "user-999",
+        "amount": 250.00,
+        "ipAddress": "200.0.0.1"
+      },
+      {
+        "transactionId": "tx-old-3",
+        "userId": "user-999",
+        "amount": 80.00,
+        "ipAddress": "200.0.0.1"
+      },
+      {
+        "transactionId": "tx-old-4",
+        "userId": "user-999",
+        "amount": 1200.00,
+        "ipAddress": "200.0.0.1"
+      },
+      {
+        "transactionId": "tx-old-5",
+        "userId": "user-999",
+        "amount": 45.00,
+        "ipAddress": "200.0.0.1"
+      },
+      {
+        "transactionId": "tx-old-6",
+        "userId": "user-999",
+        "amount": 900.00,
+        "ipAddress": "200.0.0.1"
+      }
+    ]
+  }
+}
