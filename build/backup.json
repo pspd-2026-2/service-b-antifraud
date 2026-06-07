@@ -2,45 +2,84 @@
   "blocklist": {
     "172.16.254.1": true,
     "192.168.1.100": true,
-    "10.0.0.55": true
+    "10.0.0.55": true,
+    "203.0.113.7": true
   },
   "transactions": {
     "user-999": [
       {
         "transactionId": "tx-old-1",
         "userId": "user-999",
-        "amount": 100.50,
+        "amount": 100.5,
         "ipAddress": "200.0.0.1"
       },
       {
         "transactionId": "tx-old-2",
         "userId": "user-999",
-        "amount": 250.00,
+        "amount": 250.0,
         "ipAddress": "200.0.0.1"
       },
       {
         "transactionId": "tx-old-3",
         "userId": "user-999",
-        "amount": 80.00,
+        "amount": 80.0,
         "ipAddress": "200.0.0.1"
       },
       {
         "transactionId": "tx-old-4",
         "userId": "user-999",
-        "amount": 1200.00,
+        "amount": 1200.0,
         "ipAddress": "200.0.0.1"
       },
       {
         "transactionId": "tx-old-5",
         "userId": "user-999",
-        "amount": 45.00,
+        "amount": 45.0,
         "ipAddress": "200.0.0.1"
       },
       {
         "transactionId": "tx-old-6",
         "userId": "user-999",
-        "amount": 900.00,
+        "amount": 900.0,
         "ipAddress": "200.0.0.1"
+      }
+    ],
+    "user-fraudster": [
+      {
+        "transactionId": "tx-fraud-1",
+        "userId": "user-fraudster",
+        "amount": 5500.0,
+        "ipAddress": "203.0.113.7"
+      },
+      {
+        "transactionId": "tx-fraud-2",
+        "userId": "user-fraudster",
+        "amount": 7200.0,
+        "ipAddress": "203.0.113.7"
+      },
+      {
+        "transactionId": "tx-fraud-3",
+        "userId": "user-fraudster",
+        "amount": 3100.0,
+        "ipAddress": "203.0.113.7"
+      },
+      {
+        "transactionId": "tx-fraud-4",
+        "userId": "user-fraudster",
+        "amount": 8900.0,
+        "ipAddress": "203.0.113.7"
+      },
+      {
+        "transactionId": "tx-fraud-5",
+        "userId": "user-fraudster",
+        "amount": 4400.0,
+        "ipAddress": "203.0.113.7"
+      },
+      {
+        "transactionId": "tx-fraud-6",
+        "userId": "user-fraudster",
+        "amount": 6100.0,
+        "ipAddress": "203.0.113.7"
       }
     ]
   }
