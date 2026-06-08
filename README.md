@@ -65,7 +65,7 @@ O projeto utiliza o arquivo `.env` para configuração local (veja o `.env.examp
 
 ### 1. Rodando Localmente (Para Desenvolvimento)
 
-Certifique-se de ter o Go 1.22+ instalado.
+Certifique-se de ter o **Go 1.25+** instalado.
 
 ```bash
 # Baixe as dependências
@@ -78,15 +78,15 @@ go run ./cmd/server/main.go
 
 *Os servidores subirão nas portas `8081` (REST) e `50052` (gRPC) e carregarão a seed de dados do JSON.*
 
-### 2. Rodando via Docker (Para Kubernetes / Minikube)
+### 2. Executar via Docker (Para Kubernetes / Minikube)
 
-O `Dockerfile` foi posicionado na pasta `build/`. Para gerar a imagem corretamente, **o comando de build deve ser executado na raiz do repositório**:
+O `Dockerfile` foi posicionado na pasta `build/`. Para gerar a imagem corretamente, **o comando de compilação (build) deve ser executado na raiz do repositório**:
 
 ```bash
-# Gerar a imagem estática
+# Gerar a imagem estática localmente
 docker build -f build/Dockerfile -t antifraud-service:latest .
 
-# Rodar o contêiner mapeando ambas as portas
+# Executar o contentor a mapear ambas as portas
 docker run -p 8081:8081 -p 50052:50052 antifraud-service:latest
 
 ```
@@ -95,7 +95,7 @@ docker run -p 8081:8081 -p 50052:50052 antifraud-service:latest
 
 ## 🧪 Como Testar e Gerar a Massa de Dados
 
-Você pode testar a aplicação utilizando o **Postman** (que tem suporte nativo a gRPC).
+Você pode testar a aplicação utilizando o **Postman** (que possui suporte nativo a gRPC e multiplexação).
 
 ### 📡 API REST (Porta 8081)
 
@@ -113,9 +113,11 @@ Você pode testar a aplicação utilizando o **Postman** (que tem suporte nativo
 
 ### 🚄 API gRPC (Porta 50052)
 
-Importe o arquivo `proto/antifraud.proto` no seu Postman ou grpcurl.
+No Postman, crie uma nova requisição do tipo **gRPC** e importe o arquivo `proto/antifraud.proto` para carregar os contratos.
 
-1. Unary Streaming (`AnalyzeRiskScore`) Validação imediata da transação. Utiliza payload semelhante ao REST:
+#### 1. Unary Streaming (`AnalyzeRiskScore`)
+
+Validação imediata da transação. Selecione o método e envie o payload abaixo:
 
 ```json
 {
@@ -127,9 +129,18 @@ Importe o arquivo `proto/antifraud.proto` no seu Postman ou grpcurl.
 
 ```
 
-*(Nota: O `user-999` e o IP `172.16.254.1` já estão na seed do `backup.json`, o que causará bloqueio automático provando que o banco em memória está funcionando).*
+*(Nota: O `user-999` e o IP `172.16.254.1` já estão na seed do `backup.json`, o que causará bloqueio automático provando que o banco em memória está funcionando sob a trava do Mutex).*
 
-2. Client Streaming (`BatchChargeback`) Processamento em lote de estornos. O cliente abre a conexão e envia múltiplos eventos. Cada IP enviado aqui é automaticamente adicionado à Blocklist dinâmica do servidor em tempo real:
+
+
+#### 2. Client Streaming (`BatchChargeback`)
+
+Processamento em lote sob demanda. Para testar esse fluxo contínuo:
+
+1. Selecione o método `BatchChargeback`.
+2. Clique em **Invoke** para abrir o túnel HTTP/2.
+3. Envie múltiplos payloads individuais (como o abaixo). Cada IP enviado é processado um a um e adicionado à *blocklist* com complexidade de memória $\mathcal{O}(1)$.
+4. Clique em **End Stream** para que o servidor feche a conexão e retorne o sumário (`ChargebackSummary`).
 
 ```json
 {
@@ -137,3 +148,9 @@ Importe o arquivo `proto/antifraud.proto` no seu Postman ou grpcurl.
   "reason": "Cloned Card",
   "ip_address": "10.0.0.155"
 }
+
+```
+
+
+
+---
