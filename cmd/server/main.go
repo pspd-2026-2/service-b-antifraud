@@ -14,6 +14,8 @@ import (
 	"service-b-antifraud/proto/pb"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/health"
+	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
 func main() {
@@ -38,6 +40,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 	grpcHandler := grpc_adapter.NewAntiFraudGrpcHandler(appService)
 	pb.RegisterAntiFraudServiceServer(grpcServer, grpcHandler)
+	healthpb.RegisterHealthServer(grpcServer, health.NewServer())
 
 	fmt.Printf("🚀 gRPC Server rodando na porta %s...\n", cfg.GrpcPort)
 	if err := grpcServer.Serve(lis); err != nil {
