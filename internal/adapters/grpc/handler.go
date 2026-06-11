@@ -3,9 +3,11 @@ package grpc_adapter
 import (
 	"context"
 	"io"
+	"log"
 	"service-b-antifraud/internal/core/domain"
 	"service-b-antifraud/internal/usecase"
 	"service-b-antifraud/proto/pb"
+	"time"
 )
 
 // AntiFraudGrpcHandler implementa os serviços gRPC definidos no proto, adaptando a lógica de negócio
@@ -20,6 +22,17 @@ func NewAntiFraudGrpcHandler(app *usecase.RiskService) *AntiFraudGrpcHandler {
 	return &AntiFraudGrpcHandler{appService: app}
 }
 
+func riskLevel(status string) string {
+	switch status {
+	case "blocked":
+		return "HIGH"
+	case "review":
+		return "MEDIUM"
+	default:
+		return "LOW"
+	}
+}
+
 // Unary
 func (h *AntiFraudGrpcHandler) AnalyzeRiskScore(ctx context.Context, req *pb.RiskRequest) (*pb.RiskResponse, error) {
 	tx := domain.Transaction{
@@ -29,7 +42,11 @@ func (h *AntiFraudGrpcHandler) AnalyzeRiskScore(ctx context.Context, req *pb.Ris
 		IPAddress:     req.IpAddress,
 	}
 
+	start := time.Now()
 	result := h.appService.EvaluateRisk(tx)
+
+	log.Printf("[ANALYZE] gRPC AnalyzeRiskScore transactionId=%s status=%s risk=%s riskScore=%d duration=%s",
+		result.TransactionID, result.Status, riskLevel(result.Status), result.RiskScore, time.Since(start))
 
 	return &pb.RiskResponse{
 		TransactionId: result.TransactionID,
