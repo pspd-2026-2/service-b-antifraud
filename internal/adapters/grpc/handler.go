@@ -75,9 +75,6 @@ func (h *AntiFraudGrpcHandler) BatchChargeback(stream pb.AntiFraudService_BatchC
 		}
 
 		// LOGICA REAL: O estorno contém o IP que fraudou.
-		// Vamos supor que o req contenha o IP ou você o recupere.
-		// Para simplificar o exemplo, vamos bloquear um IP baseado na transação.
-		// (Ajuste o seu protobuf para o ChargebackRequest receber o IP se necessário)
 		h.appService.BlockIP(req.IpAddress)
 		processed++
 	}
